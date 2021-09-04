@@ -33,17 +33,17 @@ func Execute() {
 
 func init() {
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "./opslevel-k8s.yaml", "")
-	rootCmd.PersistentFlags().String("logFormat", "TEXT", "overrides environment variable 'OPSLEVEL_LOG_FORMAT' (options [\"JSON\", \"TEXT\"])")
-	rootCmd.PersistentFlags().String("logLevel", "INFO", "overrides environment variable 'OPSLEVEL_LOG_LEVEL' (options [\"ERROR\", \"WARN\", \"INFO\", \"DEBUG\"])")
-	rootCmd.PersistentFlags().String("apiurl", "https://api.opslevel.com/graphql", "The OpsLevel API Url. Overrides environment variable 'OPSLEVEL_API_URL'")
-	rootCmd.PersistentFlags().String("apitoken", "", "The OpsLevel API Token. Overrides environment variable 'OPSLEVEL_API_TOKEN'")
+	rootCmd.PersistentFlags().String("log-format", "TEXT", "overrides environment variable 'OPSLEVEL_LOG_FORMAT' (options [\"JSON\", \"TEXT\"])")
+	rootCmd.PersistentFlags().String("log-level", "INFO", "overrides environment variable 'OPSLEVEL_LOG_LEVEL' (options [\"ERROR\", \"WARN\", \"INFO\", \"DEBUG\"])")
+	rootCmd.PersistentFlags().String("api-url", "https://api.opslevel.com/graphql", "The OpsLevel API Url. Overrides environment variable 'OPSLEVEL_API_URL'")
+	rootCmd.PersistentFlags().String("api-token", "", "The OpsLevel API Token. Overrides environment variable 'OPSLEVEL_API_TOKEN'")
 	rootCmd.PersistentFlags().IntP("workers", "w", -1, "Sets the number of workers for API call processing. The default is == # CPU cores (cgroup aware). Overrides environment variable 'OPSLEVEL_WORKERS'")
 
 	viper.BindPFlags(rootCmd.PersistentFlags())
-	viper.BindEnv("logFormat", "OPSLEVEL_LOG_FORMAT", "OL_LOG_FORMAT", "OL_LOGFORMAT")
-	viper.BindEnv("logLevel", "OPSLEVEL_LOG_LEVEL", "OL_LOG_LEVEL", "OL_LOGLEVEL")
-	viper.BindEnv("apiurl", "OPSLEVEL_API_URL", "OL_API_URL", "OL_APIURL")
-	viper.BindEnv("apitoken", "OPSLEVEL_API_TOKEN", "OL_API_TOKEN", "OL_APITOKEN")
+	viper.BindEnv("log-format", "OPSLEVEL_LOG_FORMAT", "OL_LOG_FORMAT", "OL_LOGFORMAT")
+	viper.BindEnv("log-level", "OPSLEVEL_LOG_LEVEL", "OL_LOG_LEVEL", "OL_LOGLEVEL")
+	viper.BindEnv("api-url", "OPSLEVEL_API_URL", "OL_API_URL", "OL_APIURL")
+	viper.BindEnv("api-token", "OPSLEVEL_API_TOKEN", "OL_API_TOKEN", "OL_APITOKEN")
 	viper.BindEnv("workers", "OPSLEVEL_WORKERS", "OL_WORKERS")
 	cobra.OnInitialize(initConfig)
 }
@@ -78,8 +78,8 @@ func readConfig() {
 }
 
 func setupLogging() {
-	logFormat := strings.ToLower(viper.GetString("logFormat"))
-	logLevel := strings.ToLower(viper.GetString("logLevel"))
+	logFormat := strings.ToLower(viper.GetString("log-format"))
+	logLevel := strings.ToLower(viper.GetString("log-level"))
 
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 
