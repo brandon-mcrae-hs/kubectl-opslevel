@@ -33,13 +33,18 @@ func Execute() {
 
 func init() {
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "./opslevel-k8s.yaml", "")
-	rootCmd.PersistentFlags().String("logFormat", "TEXT", "overrides environment variable 'OL_LOGFORMAT' (options [\"JSON\", \"TEXT\"])")
-	rootCmd.PersistentFlags().String("logLevel", "INFO", "overrides environment variable 'OL_LOGLEVEL' (options [\"ERROR\", \"WARN\", \"INFO\", \"DEBUG\"])")
-	rootCmd.PersistentFlags().String("api-token", "", "The OpsLevel API Token. Overrides environment variable 'OL_APITOKEN'")
-	rootCmd.PersistentFlags().IntP("workers", "w", -1, "Sets the number of workers for API call processing. The default is == # CPU cores (cgroup aware). Overrides environment variable 'OL_WORKERS'")
+	rootCmd.PersistentFlags().String("logFormat", "TEXT", "overrides environment variable 'OPSLEVEL_LOG_FORMAT' (options [\"JSON\", \"TEXT\"])")
+	rootCmd.PersistentFlags().String("logLevel", "INFO", "overrides environment variable 'OPSLEVEL_LOG_LEVEL' (options [\"ERROR\", \"WARN\", \"INFO\", \"DEBUG\"])")
+	rootCmd.PersistentFlags().String("apiurl", "https://api.opslevel.com/graphql", "The OpsLevel API Url. Overrides environment variable 'OPSLEVEL_API_URL'")
+	rootCmd.PersistentFlags().String("apitoken", "", "The OpsLevel API Token. Overrides environment variable 'OPSLEVEL_API_TOKEN'")
+	rootCmd.PersistentFlags().IntP("workers", "w", -1, "Sets the number of workers for API call processing. The default is == # CPU cores (cgroup aware). Overrides environment variable 'OPSLEVEL_WORKERS'")
 
 	viper.BindPFlags(rootCmd.PersistentFlags())
-	viper.BindPFlag("apitoken", rootCmd.PersistentFlags().Lookup("api-token"))
+	viper.BindEnv("logFormat", "OPSLEVEL_LOG_FORMAT", "OL_LOG_FORMAT", "OL_LOGFORMAT")
+	viper.BindEnv("logLevel", "OPSLEVEL_LOG_LEVEL", "OL_LOG_LEVEL", "OL_LOGLEVEL")
+	viper.BindEnv("apiurl", "OPSLEVEL_API_URL", "OL_API_URL", "OL_APIURL")
+	viper.BindEnv("apitoken", "OPSLEVEL_API_TOKEN", "OL_API_TOKEN", "OL_APITOKEN")
+	viper.BindEnv("workers", "OPSLEVEL_WORKERS", "OL_WORKERS")
 	cobra.OnInitialize(initConfig)
 }
 
@@ -67,7 +72,7 @@ func readConfig() {
 		viper.AddConfigPath(".")
 		viper.AddConfigPath(home)
 	}
-	viper.SetEnvPrefix("OL")
+	viper.SetEnvPrefix("OPSLEVEL")
 	viper.AutomaticEnv()
 	viper.ReadInConfig()
 }
